@@ -1,33 +1,65 @@
-//load express
-const express = require ( 'express' )
-//load express-handlebars
-const exphbs = require ( 'express-handlebars' )
-//load restaurant
-const restaurant_list = require ( './restaurant.json' )
+const express = require("express");
+const exphbs = require("express-handlebars");
+const restaurantDBTable = require("./models/restaurantModel");
+const bodyParser = require("body-parser");
+const app = express();
+const port = 3000;
 
-//Declare related variables for server
-const app = express ()
-const port = 3000
+//engine
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.engine ( 'handlebars' , exphbs ({ defaultLayout : 'main' }) )
-app.set ( 'view engine' , 'handlebars' )
-app.use ( express.static ( 'public' ) )
+// connection
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost/restaurantDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const db = mongoose.connection;
+db.on("error", () => {
+  console.log("mongodb error!");
+});
 
-//get data by client and response to client
-app.get ( '/' , ( req , res ) => {
-    res.render ( 'index', { restaurants : restaurant_list.results } )
-})
-app.get ( '/restaurants/:restaurant_id' , ( req , res ) => {
-    const restaurant= restaurant_list.results.find ( restaurant => restaurant.id.toString() === req.params.restaurant_id)
-    res.render ( 'show', { restaurant: restaurant } )
-})
-app.get ( '/search' , ( req , res ) => {
-    const keyword = req.query.keyword
-    const restaurants = restaurant_list.results.filter ( restaurant => restaurant.name.toLowerCase().includes(keyword.toLowerCase().trim()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase().trim()) )   
-    res.render ( 'index', { restaurants: restaurants , keywords :  req.query.keyword } )
-})
+db.once("open", () => {
+  console.log("mongodb connected!");
+});
+
+//index
+app.get("/", (req, res) => {
+  restaurantDBTable
+    .find()
+    .lean()
+    .then((restaurantListTable) =>
+      res.render("index", { restaurantListTable })
+    );
+});
+
+//show
+app.get("/restaurant/:id", (req, res) => {
+  const id = req.params.id;
+  return restaurantDBTable
+    .findById(id)
+    .lean()
+    .then((singleRestaurant) => res.render("show", { singleRestaurant }));
+});
+
+//search
+app.get("/search", (req, res) => {
+  const keyword = req.query.keyword;
+  const restaurants = restaurantList.results.filter(
+    (restaurant) =>
+      restaurant.name.toLowerCase().includes(keyword.toLowerCase().trim()) ||
+      restaurant.category.toLowerCase().includes(keyword.toLowerCase().trim())
+  );
+  res.render("index", {
+    restaurants: restaurants,
+    keywords: req.query.keyword,
+  });
+});
 
 //listening server
-app.listen ( port , () => {
-    console.log ( `Resaurant Web is running on http://localhost:${port}` )
-})
+app.listen(port, () => {
+  console.log(`Restaurant Web is running on http://localhost:${port}`);
+});
