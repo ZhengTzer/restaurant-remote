@@ -46,23 +46,37 @@ app.get("/restaurant/:id", (req, res) => {
 });
 
 //new
-app.get("/restaurant/new", (req, res) => {
+app.get("/new", (req, res) => {
   return res.render("new");
 });
 
-/* //search
-app.get("/search", (req, res) => {
-  const keyword = req.query.keyword;
-  const restaurants = restaurant_list.results.filter(
-    (restaurant) =>
-      restaurant.name.toLowerCase().includes(keyword.toLowerCase().trim()) ||
-      restaurant.category.toLowerCase().includes(keyword.toLowerCase().trim())
-  );
-  res.render("index", {
-    restaurants: restaurants,
-    keywords: req.query.keyword,
-  });
-}); */
+app.post("/restaurant", (req, res) => {
+  const {
+    name,
+    name_en,
+    category,
+    image,
+    location,
+    phone,
+    google_map,
+    rating,
+    description,
+  } = req.body;
+  return restaurantDBTable
+    .create({
+      name,
+      name_en,
+      category,
+      image,
+      location,
+      phone,
+      google_map,
+      rating,
+      description,
+    })
+    .then(() => res.redirect("/"))
+    .catch((error) => console.log(error));
+});
 
 //edit
 app.get("/restaurant/:id/edit", (req, res) => {
@@ -102,6 +116,39 @@ app.post("/restaurant/:id/edit", (req, res) => {
     })
     .then(() => res.redirect(`/restaurant/${id}`))
     .catch((error) => console.log(error));
+});
+
+//delete
+app.post("/restaurant/:id/delete", (req, res) => {
+  const id = req.params.id;
+  return restaurantDBTable
+    .findById(id)
+    .then((deleteRestaurant) => deleteRestaurant.remove())
+    .then(() => res.redirect("/"));
+});
+
+//search
+app.get("/search", (req, res) => {
+  const keyword = req.query.keyword.trim().toLowerCase();
+  console.log(keyword);
+  restaurantDBTable
+    .find()
+    .lean()
+    .then((restaurantListTable) => {
+      const searchRestaurant = restaurantListTable.filter(
+        (restaurantListTable) => {
+          return (
+            restaurantListTable.name.toLowerCase().includes(keyword) ||
+            restaurantListTable.category.toLowerCase().includes(keyword)
+          );
+        }
+      );
+      res.render("index", {
+        restaurantListTable: searchRestaurant,
+        keyword: keyword,
+      });
+    })
+    .catch((error) => console.error(error));
 });
 
 //listening server
