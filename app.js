@@ -45,10 +45,15 @@ app.get("/restaurant/:id", (req, res) => {
     .then((singleRestaurant) => res.render("show", { singleRestaurant }));
 });
 
-//search
+//new
+app.get("/restaurant/new", (req, res) => {
+  return res.render("new");
+});
+
+/* //search
 app.get("/search", (req, res) => {
   const keyword = req.query.keyword;
-  const restaurants = restaurantList.results.filter(
+  const restaurants = restaurant_list.results.filter(
     (restaurant) =>
       restaurant.name.toLowerCase().includes(keyword.toLowerCase().trim()) ||
       restaurant.category.toLowerCase().includes(keyword.toLowerCase().trim())
@@ -57,6 +62,46 @@ app.get("/search", (req, res) => {
     restaurants: restaurants,
     keywords: req.query.keyword,
   });
+}); */
+
+//edit
+app.get("/restaurant/:id/edit", (req, res) => {
+  const id = req.params.id;
+  return restaurantDBTable
+    .findById(id)
+    .lean()
+    .then((singleRestaurant) => res.render("edit", { singleRestaurant }));
+});
+
+app.post("/restaurant/:id/edit", (req, res) => {
+  const id = req.params.id;
+  const {
+    name,
+    name_en,
+    category,
+    image,
+    location,
+    phone,
+    google_map,
+    rating,
+    description,
+  } = req.body;
+  return restaurantDBTable
+    .findById(id)
+    .then((restaurant) => {
+      restaurant.name = name;
+      restaurant.name_en = name_en;
+      restaurant.category = category;
+      restaurant.image = image;
+      restaurant.location = location;
+      restaurant.phone = phone;
+      restaurant.google_map = google_map;
+      restaurant.rating = rating;
+      restaurant.description = description;
+      return restaurant.save();
+    })
+    .then(() => res.redirect(`/restaurant/${id}`))
+    .catch((error) => console.log(error));
 });
 
 //listening server
