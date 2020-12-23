@@ -1,4 +1,4 @@
-![landing page](https://raw.githubusercontent.com/ZhengTzer/restaurant-remote/master/public/image/frontPage.png)
+![landing page](https://raw.githubusercontent.com/ZhengTzer/restaurant-remote/master/public/image/restaurant_v02.png)
 
 # Restaurant List
 
