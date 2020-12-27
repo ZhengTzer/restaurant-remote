@@ -1,4 +1,4 @@
-![landing page](https://raw.githubusercontent.com/ZhengTzer/restaurant-remote/master/public/image/frontPage.png)
+![landing page](https://raw.githubusercontent.com/ZhengTzer/restaurant-remote/master/public/image/restaurant_v02.png)
 
 # Restaurant List
 
@@ -24,8 +24,8 @@ step 6: open in browser http://localhost:3000/
 
 ### to be developed
 
-- [] auto address with city and district when creating new restaurant
-- [] display uploaded file image
-- [] validate data input
-- [] restaurant category become option instead of text
-- [] google map embed and return selected coordinate
+- [ ] auto address with city and district when creating new restaurant
+- [ ] display uploaded file image
+- [ ] validate data input
+- [ ] restaurant category become option instead of text
+- [ ] google map embed and return selected coordinate
