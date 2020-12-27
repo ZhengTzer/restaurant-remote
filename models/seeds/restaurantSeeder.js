@@ -1,24 +1,12 @@
 // mongoose connection
-const mongoose = require("mongoose");
-const restaurantModel = require("../restaurantModel");
-const restaurantListDB = require("../../restaurant.json").results;
+const db = require('../../config/mongoose')
+const restaurantModel = require('../restaurantModel')
+const restaurantListDB = require('../../restaurant.json').results
 
-mongoose.connect("mongodb://localhost/restaurantDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-
-db.on("error", () => {
-  console.log("mongodb error!");
-});
-
-db.once("open", () => {
-  console.log("mongodb connected!");
-
+// add seed data
+db.once('open', () => {
   for (let i = 0; i < restaurantListDB.length; i++) {
-    restaurantModel.create(restaurantListDB[i]);
+    restaurantModel.create(restaurantListDB[i])
   }
-  console.log("insert sample json, done!");
-});
+  console.log('insert sample data, done!')
+})
