@@ -2,17 +2,8 @@ const express = require('express')
 const router = express.Router()
 const restaurantDBTable = require('../../models/restaurantModel')
 
-// route
-//show
-router.get('/:id', (req, res) => {
-  const id = req.params.id
-  return restaurantDBTable
-    .findById(id)
-    .lean()
-    .then((singleRestaurant) => res.render('show', { singleRestaurant }))
-})
-
-//new
+// routes
+// new
 router.get('/new', (req, res) => {
   return res.render('new')
 })
@@ -43,6 +34,15 @@ router.post('/', (req, res) => {
     })
     .then(() => res.redirect('/'))
     .catch((error) => console.log(error))
+})
+
+//show
+router.get('/:id', (req, res) => {
+  const id = req.params.id
+  return restaurantDBTable
+    .findById(id)
+    .lean()
+    .then((singleRestaurant) => res.render('show', { singleRestaurant }))
 })
 
 //edit
@@ -85,37 +85,13 @@ router.put('/:id', (req, res) => {
     .catch((error) => console.log(error))
 })
 
-//delete
+// delete
 router.delete('/:id', (req, res) => {
   const id = req.params.id
   return restaurantDBTable
     .findById(id)
     .then((deleteRestaurant) => deleteRestaurant.remove())
     .then(() => res.redirect('/'))
-})
-
-//search
-router.get('/search', (req, res) => {
-  const keyword = req.query.keyword.trim().toLowerCase()
-  console.log(keyword)
-  restaurantDBTable
-    .find()
-    .lean()
-    .then((restaurantListTable) => {
-      const searchRestaurant = restaurantListTable.filter(
-        (restaurantListTable) => {
-          return (
-            restaurantListTable.name.toLowerCase().includes(keyword) ||
-            restaurantListTable.category.toLowerCase().includes(keyword)
-          )
-        }
-      )
-      res.render('index', {
-        restaurantListTable: searchRestaurant,
-        keyword: keyword
-      })
-    })
-    .catch((error) => console.error(error))
 })
 
 // module export

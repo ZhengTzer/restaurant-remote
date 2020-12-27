@@ -4,9 +4,16 @@ const restaurantDBTable = require('../../models/restaurantModel')
 
 // index page
 router.get('/', (req, res) => {
+  const sortOption = req.query.sort
+  console.log(sortOption)
+
+  let sort = [sortOption]
+  console.log(sort)
+
   restaurantDBTable
     .find()
     .lean()
+    .sort(...sort)
     .then((restaurantListTable) => res.render('index', { restaurantListTable }))
 })
 
