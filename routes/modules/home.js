@@ -7,7 +7,8 @@ router.get('/', (req, res) => {
   const sortOption = req.query.sort
   console.log(sortOption)
 
-  let sort = [sortOption]
+  // to be develope
+  let sort = []
   console.log(sort)
 
   restaurantDBTable
