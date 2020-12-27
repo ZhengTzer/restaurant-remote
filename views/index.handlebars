@@ -20,12 +20,13 @@
       </div>
     </div>
     <form class="mb-3" action="/" method="GET">
-      <label class="fas fa-sort fa-lg btn m-0" style="background: transparent" for="sort">sort :</label>
+
       <select onchange="this.form.submit()" name="sort" id="sort">
-        <option value="name_en: 1">A-Z</option>
-        <option value="name_en: -1">Z-A</option>
-        <option value="location: 1">地區</option>
-        <option value="category: 1">類別</option>
+        <option selected hidden>排序</option>
+        <option value="1">A-Z</option>
+        <option value="2">Z-A</option>
+        <option value="3">地區</option>
+        <option value="4">類別</option>
       </select>
     </form>
 

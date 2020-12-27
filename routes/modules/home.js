@@ -8,13 +8,18 @@ router.get('/', (req, res) => {
   console.log(sortOption)
 
   // to be develope
-  let sort = []
-  console.log(sort)
+  const sortMethod = [
+    { name_en: 1 },
+    { name_en: -1 },
+    { location: 1 },
+    { category: 1 }
+  ]
+  console.log(sortMethod)
 
   restaurantDBTable
     .find()
     .lean()
-    .sort(...sort)
+    .sort(sortMethod[sortOption])
     .then((restaurantListTable) => res.render('index', { restaurantListTable }))
 })
 
