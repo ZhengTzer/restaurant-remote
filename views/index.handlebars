@@ -63,7 +63,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                      <form action="/restaurant/{{this._id}}/delete" method="POST" style='display:inline'>
+                      <form action="/restaurant/{{this._id}}?_method=DELETE" method="POST" style='display:inline'>
                         <button type="submit" class="btn btn-primary btn-danger">確認</button>
                       </form>
                     </div>
