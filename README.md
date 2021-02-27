@@ -18,7 +18,7 @@ A simple restaurant listing web app using node.js, express and express-handlebar
 step 1: git clone https://github.com/ZhengTzer/restaurant-remote.git  
 step 2: cd to the folder  
 step 3: npm install in git bash  
-step 4: node "./models/seeds/restaurantSeeder.js" to install seed data  
+step 4: npm run seed to install seed data  
 step 5: npm run dev to start  
 step 6: open in browser http://localhost:3000/
 

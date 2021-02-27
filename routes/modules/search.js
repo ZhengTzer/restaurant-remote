@@ -6,17 +6,20 @@ const restaurantDBTable = require('../../models/restaurantModel')
 router.get('/', (req, res) => {
   const keyword = req.query.keyword
   const queryWord = "'" + req.query.keyword + "'"
-  const query = {
-    $and: [
-      { name: { $regex: queryWord, $options: 'i' } },
-      { name_en: { $regex: queryWord, $options: 'i' } }
-    ]
-  }
+  console.log(queryWord)
+  // const query = {
+  //   $and: [
+  //     { name: { $regex: queryWord, $options: 'i' } },
+  //     { name_en: { $regex: queryWord, $options: 'i' } }
+  //   ]
+  // }
 
   restaurantDBTable
-    .find(query)
+    .find({ name_en: { $regex: queryWord, $options: 'i' } })
     .lean()
-    .then((restaurants) => res.render('index', { restaurants, keyword }))
+    .then((restaurantListTable) =>
+      res.render('index', { restaurantListTable, keyword })
+    )
     .catch((error) => console.log(error))
 })
 
