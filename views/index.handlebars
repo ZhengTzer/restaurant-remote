@@ -20,13 +20,12 @@
       </div>
     </div>
     <form class="mb-3" action="/" method="GET">
-
       <select onchange="this.form.submit()" name="sort" id="sort">
         <option selected hidden>排序</option>
-        <option value="1">A-Z</option>
-        <option value="2">Z-A</option>
-        <option value="3">地區</option>
-        <option value="4">類別</option>
+        <option value="0">A-Z</option>
+        <option value="1">Z-A</option>
+        <option value="2">地區</option>
+        <option value="3">評分</option>
       </select>
     </form>
 
@@ -37,9 +36,9 @@
 <!-- restaurant list -->
 <div class="container mt-5">
   <div class="row">
-    <div class="col-md-10 col-12 mx-auto">
-      <div class="card-columns">
-        {{#each restaurantListTable}}
+    {{#each restaurantListTable}}
+    <div class="col-sm-3">
+      <div class="card mb-2">
         <a href="./restaurant/{{this._id}}" class="text-secondary">
           <div class="card mb-3">
             <img class="card-img-top" src="{{this.image}}" alt=" {{this.name}}">
@@ -93,8 +92,8 @@
             </div>
           </div>
         </a>
-        {{/each}}
       </div>
     </div>
+    {{/each}}
   </div>
 </div>

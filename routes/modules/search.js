@@ -4,25 +4,20 @@ const restaurantDBTable = require('../../models/restaurantModel')
 
 //search
 router.get('/', (req, res) => {
-  const keyword = req.query.keyword.trim().toLowerCase()
+  const keyword = req.query.keyword
+  const queryWord = "'" + req.query.keyword + "'"
+  const query = {
+    $and: [
+      { name: { $regex: queryWord, $options: 'i' } },
+      { name_en: { $regex: queryWord, $options: 'i' } }
+    ]
+  }
+
   restaurantDBTable
-    .find()
+    .find(query)
     .lean()
-    .then((restaurantListTable) => {
-      const searchRestaurant = restaurantListTable.filter(
-        (restaurantListTable) => {
-          return (
-            restaurantListTable.name.toLowerCase().includes(keyword) ||
-            restaurantListTable.category.toLowerCase().includes(keyword)
-          )
-        }
-      )
-      res.render('index', {
-        restaurantListTable: searchRestaurant,
-        keyword: keyword
-      })
-    })
-    .catch((error) => console.error(error))
+    .then((restaurants) => res.render('index', { restaurants, keyword }))
+    .catch((error) => console.log(error))
 })
 
 // module export

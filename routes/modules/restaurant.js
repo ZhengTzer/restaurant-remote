@@ -20,6 +20,7 @@ router.post('/', (req, res) => {
     rating,
     description
   } = req.body
+  console.log(req.body)
   return restaurantDBTable
     .create({
       name,
