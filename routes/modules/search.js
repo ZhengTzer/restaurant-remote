@@ -2,29 +2,22 @@ const express = require('express')
 const router = express.Router()
 const restaurantDBTable = require('../../models/restaurantModel')
 
-//search
+//search better option
 router.get('/', (req, res) => {
   const keyword = req.query.keyword
 
   restaurantDBTable
-    .find()
-    .lean()
-    .then((restaurantListTable) => {
-      const searchRestaurant = restaurantListTable.filter(
-        (restaurantListTable) => {
-          return (
-            restaurantListTable.name.toLowerCase().includes(keyword) ||
-            restaurantListTable.name_en.toLowerCase().includes(keyword) ||
-            restaurantListTable.category.toLowerCase().includes(keyword)
-          )
-        }
-      )
-      res.render('index', {
-        restaurantListTable: searchRestaurant,
-        keyword: keyword
-      })
+    .find({
+      $or: [
+        { name: { $regex: keyword, $options: 'i' } },
+        { name_en: { $regex: keyword, $options: 'i' } }
+      ]
     })
-    .catch((error) => console.error(error))
+    .lean()
+    .then((restaurantListTable) =>
+      res.render('index', { restaurantListTable, keyword })
+    )
+    .catch((error) => console.log(error))
 })
 
 // module export
